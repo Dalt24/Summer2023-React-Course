@@ -1,0 +1,2 @@
+- Go through diagram provided
+- Step through putting components into their own folder

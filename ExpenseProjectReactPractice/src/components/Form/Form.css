@@ -1,0 +1,8 @@
+.expense-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.expense-form-button{
+    margin-top: 30px;
+}
