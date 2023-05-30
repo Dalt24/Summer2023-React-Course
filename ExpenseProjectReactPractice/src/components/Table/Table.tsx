@@ -12,7 +12,7 @@ export default function Table(props: Props) {
   return (
     <div className="expense-table-container">
       <h2 className="expense-table-header">Expense Table</h2>
-      <table className="expense-table">
+      <table className="table">
         <thead>
           <tr>
             <th>Description</th>
@@ -27,7 +27,10 @@ export default function Table(props: Props) {
               <td>${expense.amount.toFixed(2)}</td>
               <td>{expense.category}</td>
               <td>
-                <button onClick={() => props.removeItem(expense)}>
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={() => props.removeItem(expense)}
+                >
                   Delete
                 </button>
               </td>

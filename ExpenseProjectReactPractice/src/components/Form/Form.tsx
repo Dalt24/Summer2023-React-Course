@@ -26,14 +26,18 @@ export default function Form({ addItem, categories }: Props) {
 
   return (
     <form onSubmit={submitForm} className="expense-form">
-      <label htmlFor="description">Description:</label>
-      <input
-        type="text"
-        id="description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
+      <div className="form-group">
+        <label htmlFor="description">Description:</label>
+        <input
+          type="text"
+          id="description"
+          className="form-control"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+      </div>
+
       <label htmlFor="amount">Amount:</label>
       <input
         type="number"
@@ -42,6 +46,7 @@ export default function Form({ addItem, categories }: Props) {
         value={amount}
         onChange={(e) => setAmount(parseFloat(e.target.value))}
         required
+        className="form-control"
       />
 
       <label htmlFor="category">Category:</label>
@@ -49,6 +54,7 @@ export default function Form({ addItem, categories }: Props) {
         id="category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
+        className="form-control"
       >
         {categories.map((category) => (
           <option key={category} value={category}>
@@ -56,7 +62,7 @@ export default function Form({ addItem, categories }: Props) {
           </option>
         ))}
       </select>
-      <button className="expense-form-button" type="submit">
+      <button className="btn btn-outline-primary mt-3" type="submit">
         Add Expense
       </button>
     </form>
