@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import Table from "../Table";
-import Form from "../Form";
-
+import { useState } from "react";
+import Table from "../Table/Table";
+import Form from "../Form/Form";
 import "./ExpenseTracker.css";
 
-interface Expense {
+export interface Expense {
   description: string;
   amount: number;
   category: string;
@@ -30,11 +29,17 @@ const ExpenseTracker = () => {
     setExpenses(expenses.filter((item) => item !== expense));
   };
 
+  console.log(expenses);
+
   return (
     <div className="expense-tracker-container">
       <h1 className="expense-tracker-header">Expense Tracker</h1>
       <Form addItem={addExpense} categories={categories} />
-      <Table items={expenses} removeItem={deleteExpense} />
+      <Table
+        items={expenses}
+        removeItem={deleteExpense}
+        setItems={setExpenses}
+      />
     </div>
   );
 };

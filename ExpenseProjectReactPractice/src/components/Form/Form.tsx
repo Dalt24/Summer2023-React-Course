@@ -1,68 +1,75 @@
-import { FormEvent, useState } from "react";
-
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Expense } from "../ExpenseTracker/ExpenseTracker";
 import "./Form.css";
 
+const schema = z.object({
+  description: z.string().nonempty(),
+  amount: z.number().min(0.01),
+  category: z.string().nonempty(),
+});
+
+// alternative to z.number().min() && line 50 , { valueAsNumber: true }
+//     .string()
+//     .transform((val) => parseFloat(val)),
+
 interface Props {
-  addItem: (item: any) => void;
+  addItem: (item: Expense) => void;
   categories: string[];
 }
 
 export default function Form({ addItem, categories }: Props) {
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState(0);
-  const [category, setCategory] = useState(categories[0]);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isValid },
+    reset,
+  } = useForm<Expense>({
+    resolver: zodResolver(schema),
+  });
 
-  const submitForm = (event: FormEvent) => {
-    event.preventDefault();
-    const expense = {
-      description: description,
-      amount: amount,
-      category: category,
-    };
-    addItem(expense);
-    setAmount(0);
-    setDescription("");
+  const submitForm = (data: Expense) => {
+    addItem(data);
+    reset();
   };
 
   return (
-    <form onSubmit={submitForm} className="expense-form">
+    <form onSubmit={handleSubmit(submitForm)} className="expense-form">
       <div className="form-group">
         <label htmlFor="description">Description:</label>
-        <input
-          type="text"
-          id="description"
-          className="form-control"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
+        <input className="form-control" {...register("description")} required />
+        {errors.description && (
+          <span className="error">{errors.description.message}</span>
+        )}
       </div>
 
       <label htmlFor="amount">Amount:</label>
       <input
-        type="number"
-        id="amount"
         step="1"
-        value={amount}
-        onChange={(e) => setAmount(parseFloat(e.target.value))}
+        {...register("amount", { valueAsNumber: true })}
         required
         className="form-control"
       />
+      {errors.amount && <span className="error">{errors.amount.message}</span>}
 
       <label htmlFor="category">Category:</label>
-      <select
-        id="category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        className="form-control"
-      >
+      <select id="category" {...register("category")} className="form-control">
         {categories.map((category) => (
           <option key={category} value={category}>
             {category}
           </option>
         ))}
       </select>
-      <button className="btn btn-outline-primary mt-3" type="submit">
+      {errors.category && (
+        <span className="error">{errors.category.message}</span>
+      )}
+
+      <button
+        disabled={!isValid}
+        className="btn btn-outline-primary mt-3"
+        type="submit"
+      >
         Add Expense
       </button>
     </form>
